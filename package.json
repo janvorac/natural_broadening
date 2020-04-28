@@ -1,0 +1,29 @@
+{
+  "name": "natural_broadening",
+  "version": "1.0.0",
+  "description": "JS implementation of the stochastic process that creates Lorentzian line shape",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/janvorac/natural_broadening.git"
+  },
+  "keywords": [
+    "spectral",
+    "line",
+    "lorentzian",
+    "natural",
+    "broadening"
+  ],
+  "author": "Jan Vorac",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/janvorac/natural_broadening/issues"
+  },
+  "homepage": "https://github.com/janvorac/natural_broadening#readme",
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  }
+}
