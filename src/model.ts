@@ -3,12 +3,22 @@ export default class Model {
   protected numOfPhotons: number;
   protected linewidth: number;
   protected _photons: Array<number>;
+  public bins: Array<number>;
+  public counts: Array<number>;
 
-  public constructor(lambda0: number, linewidth: number, numOfPhotons: number) {
+
+  public constructor(
+    lambda0: number,
+    linewidth: number,
+    numOfPhotons: number,
+    numBins: number = 20
+  ) {
     this.lambda0 = lambda0;
     this.numOfPhotons = numOfPhotons;
     this.linewidth = linewidth;
     this.createPhotons();
+    this.calculateEquidistBins(lambda0, linewidth, numBins)
+    this.counts = new Array(this.bins.length - 1).fill(0);
   }
 
   /**
@@ -38,5 +48,37 @@ export default class Model {
 
   get photons(): Array<number> {
     return this._photons;
+  }
+
+  public calculateEquidistBins(
+    lambda0: number,
+    linewidth: number,
+    numBins: number
+  ): Array<number> {
+
+    this.bins = [];
+    const left = lambda0 - 6 * linewidth
+    const right = lambda0 + 6 * linewidth
+    const step = (right - left) / numBins
+    for (let i = 0; i <= numBins; i++) {
+      this.bins.push(left + i * step)
+    }
+    return this.bins
+  }
+
+  public AssignPhotonsToBins(photons: Array<number>, bins: Array<number>) {
+    const left = bins[0];
+    const right = bins[bins.length - 1];
+
+    for (let photon of photons) {
+      if ((photon < left) || (photon > right)) { continue }
+      for (let leftBinEdgeIndex = 0; leftBinEdgeIndex < bins.length - 1; leftBinEdgeIndex++) {
+        if ((photon >= bins[leftBinEdgeIndex]) && (photon < bins[leftBinEdgeIndex + 1])) {
+          this.counts[leftBinEdgeIndex] += 1;
+          break;
+        }
+      }
+    }
+    return this.counts
   }
 }
