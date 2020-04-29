@@ -25,5 +25,9 @@
   "homepage": "https://github.com/janvorac/natural_broadening#readme",
   "devDependencies": {
     "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@types/d3": "^5.7.2",
+    "d3": "^5.16.0"
   }
 }
