@@ -19,6 +19,8 @@ export default class Model {
     this.createPhotons();
     this.calculateEquidistBins(lambda0, linewidth, numBins)
     this.counts = new Array(this.bins.length - 1).fill(0);
+    this.bins = this.calculateEquidistBins(lambda0, linewidth, numBins)
+    this.counts = this.AssignPhotonsToBins(this.photons, this.bins)
   }
 
   /**
@@ -66,19 +68,31 @@ export default class Model {
     return this.bins
   }
 
+  protected findBin(value: number, bins: Array<number>) {
+    for (let leftBinEdgeIndex = 0; leftBinEdgeIndex < bins.length - 1; leftBinEdgeIndex++) {
+      if ((value >= bins[leftBinEdgeIndex]) && (value < bins[leftBinEdgeIndex + 1])) {
+        return leftBinEdgeIndex;
+      }
+    }
+    return null;
+  }
+
   public AssignPhotonsToBins(photons: Array<number>, bins: Array<number>) {
     const left = bins[0];
     const right = bins[bins.length - 1];
 
     for (let photon of photons) {
       if ((photon < left) || (photon > right)) { continue }
-      for (let leftBinEdgeIndex = 0; leftBinEdgeIndex < bins.length - 1; leftBinEdgeIndex++) {
-        if ((photon >= bins[leftBinEdgeIndex]) && (photon < bins[leftBinEdgeIndex + 1])) {
-          this.counts[leftBinEdgeIndex] += 1;
-          break;
-        }
+      const binIndex = this.findBin(photon, bins)
+      if (binIndex) {
+        this.counts[binIndex] += 1;
       }
     }
     return this.counts
+  }
+
+  public addPhoton() {
+    const value = this.randomCauchy(this.lambda0, this.linewidth)
+    return this.findBin(value, this.bins)
   }
 }
