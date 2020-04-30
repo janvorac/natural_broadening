@@ -3,11 +3,14 @@ import {
   axisLeft,
   axisBottom,
   Axis,
-  ScaleLinear
+  scaleLinear,
+  min,
+  max
 } from 'd3'
 
 export default class PlotMaker {
   protected binHeights: Array<number>;
+  protected binEdges: Array<number>;
   protected margin: object;
   protected container: any;
   public plotGroup: any;
@@ -15,12 +18,13 @@ export default class PlotMaker {
   protected height: number;
   protected xAxis: Axis<number>;
   protected yAxis: Axis<number>;
-  protected xScale: ScaleLinear<number, number>;
-  protected yScale: ScaleLinear<number, number>;
+  protected xScale: any;
+  protected yScale: any;
 
 
   public constructor(
     binHeights: Array<number>,
+    binEdges: Array<number>,
     containerID: string,
     totalWidth: number,
     totalHeight: number
@@ -33,6 +37,7 @@ export default class PlotMaker {
     };
     this.container = select(containerID)
     this.binHeights = binHeights;
+    this.binEdges = binEdges;
     this.width = totalWidth - this.margin["left"] - this.margin["right"];
     this.height = totalHeight - this.margin["top"] - this.margin["bottom"];
     this.plotGroup = this.container.append('g')
@@ -51,6 +56,33 @@ export default class PlotMaker {
     this.yAxis = this.plotGroup.append("g")
       .call(axisLeft(this.yScale))
   }
+
+  protected createScales() {
+    this.yScale = scaleLinear()
+      .range([this.height, 0])
+      .domain([min(this.binHeights), max(this.binHeights)]);
+    this.xScale = scaleLinear()
+      .range([0, this.width])
+      .domain([min(this.binEdges), max(this.binEdges)])
+  }
+
+  protected calculateRectangleXs(padding: number = 0.1) {
+    this.binHeights.length
+  }
+
+  protected drawBars() {
+    svg.selectAll("rect")
+      .data(this.binHeights)
+      .enter()
+      .append("rect")
+      .attr("x", 1)
+      .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; }))
+        .attr("height", function(d) { return height - y(d.length); })
+      .style("fill", "#69b3a2")
+  }
+
+
+
 
 
 }
