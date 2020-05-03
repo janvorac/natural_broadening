@@ -34,7 +34,7 @@ export default class PlotMaker {
     this.margin = {
       top: 60,
       right: 30,
-      bottom: 0,
+      bottom: 4,
       left: 60
     };
     this.container = select(containerID)
@@ -95,7 +95,7 @@ export default class PlotMaker {
     }
   }
 
-  protected drawBars(padding: number = 0.1) {
+  protected drawBars(padding: number = 2) {
     this.plotGroup.selectAll("rect")
       .data(this.data)
       .enter()
