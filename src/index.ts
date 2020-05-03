@@ -26,7 +26,8 @@ function addPhotonsClicked() {
 */
 
 function addPhotonsClicked() {
-  const numPhotons = 10;
+  const numPhotons = numPhotonsInput.value;
+  console.log(numPhotons)
   let photonsAdded = 0;
   const timer = setInterval(() => {
     const binIndex = model.addPhoton()
